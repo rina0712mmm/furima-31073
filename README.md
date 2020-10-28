@@ -31,7 +31,7 @@
 | days_to_ship_id| integer     | null: false                  |
 | price          | integer     | null: false                  |
 | listing_date   | date        | null: false                  |
-| user_id        | references  | null: false foreign_key: true|
+| user           | references  | null: false foreign_key: true|
 
 ### Association
 
@@ -41,8 +41,8 @@
 ## purchase テーブル
 | Column         | Type        | Options                      |
 | -------------- | ----------- | ---------------------------- |
-| item_id        | references  | null: false foreign_key: true|
-| user_id        | references  | null: false foreign_key: true|
+| item           | references  | null: false foreign_key: true|
+| user           | references  | null: false foreign_key: true|
 
 ### Association
 
