@@ -6,10 +6,13 @@ class User < ApplicationRecord
   has_many :purchases
 
   with_options presence: true do
-    validates :first_name, format: { with: /\A[ぁ-んァ-ン一-龥]+\z/ }
-    validates :last_name, format: { with: /\A[ぁ-んァ-ン一-龥]+\z/ }
-    validates :first_name_kana, format: { with: /\A[ァ-ヶー－]+\z/ }
-    validates :last_name_kana, format: { with: /\A[ァ-ヶー－]+\z/ }
+    NAME_REGEX = /\A[ぁ-んァ-ン一-龥]+\z/
+    NAME_REGEX_KANA = /\A[ァ-ヶー－]+\z/
+
+    validates :first_name, format: { with: NAME_REGEX }
+    validates :last_name, format: { with: NAME_REGEX }
+    validates :first_name_kana, format: { with: NAME_REGEX_KANA }
+    validates :last_name_kana, format: { with: NAME_REGEX_KANA }
     validates :nickname
     validates :birth_date
   end
