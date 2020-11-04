@@ -6,8 +6,8 @@ class User < ApplicationRecord
   has_many :purchases
 
   with_options presence: true do
-    NAME_REGEX = /\A[ぁ-んァ-ン一-龥]+\z/
-    NAME_REGEX_KANA = /\A[ァ-ヶー－]+\z/
+    NAME_REGEX = /\A[ぁ-んァ-ン一-龥]+\z/.freeze
+    NAME_REGEX_KANA = /\A[ァ-ヶー－]+\z/.freeze
 
     validates :first_name, format: { with: NAME_REGEX }
     validates :last_name, format: { with: NAME_REGEX }
