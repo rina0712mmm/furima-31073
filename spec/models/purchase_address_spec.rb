@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe PurchaseAddress, type: :model do
   before do
     @purchase_address = FactoryBot.build(:purchase_address)
-end
+  end
   describe '#create' do
     context 'アドレス登録がうまくいくとき' do
       it '全ての項目が存在すれば登録できる' do
@@ -40,23 +40,23 @@ end
       it '郵便番号には-がないと保存できない' do
         @purchase_address.postal_code = '1111111'
         @purchase_address.valid?
-        expect(@purchase_address.errors.full_messages).to include("Postal code is invalid")
+        expect(@purchase_address.errors.full_messages).to include('Postal code is invalid')
       end
       it '電話番号はハイフンがあると保存できない' do
         @purchase_address.phone_number = '111-1111-1111'
         @purchase_address.valid?
-        expect(@purchase_address.errors.full_messages).to include("Phone number is invalid")
+        expect(@purchase_address.errors.full_messages).to include('Phone number is invalid')
       end
       it '電話番号が11桁以上だと保存できない' do
         @purchase_address.phone_number = '111111111111'
         @purchase_address.valid?
-        expect(@purchase_address.errors.full_messages).to include("Phone number is invalid")
+        expect(@purchase_address.errors.full_messages).to include('Phone number is invalid')
+      end
+      it 'tokenが空では登録できないこと' do
+        @purchase_address.token = ''
+        @purchase_address.valid?
+        expect(@purchase_address.errors.full_messages).to include("Token can't be blank")
       end
     end
   end
 end
-      
-
-
-
-

@@ -1,25 +1,44 @@
-class PurchaseController < ApplicationController
+class PurchasesController < ApplicationController
+  before_action :authenticate_user!, only: [:index]
+  before_action :move_to_index, only: [:index]
+
   def index
-    @purchase = Item.includes(:item)
+    @item = Item.find(params[:item_id])
+    @purchase_address = PurchaseAddress.new
   end
 
   def create
-    user = User.create(user_params)
-    Address.create(address_params)
-    Item.create(item_params(item))
-  end
-  
-  provate
-
-  def user_params
-    params.permit(:nickname, :email, :encrypted_password, :first_name, :last_name, :first_name_kana, :last_name_kana, :birth_date)
-  end
-
-  def address_params
-    params.permit(:postal_code, :prefecture, :city, :house_number, :apartment, :phone_number).merge(user_id: user.id)
+    @purchase_address = PurchaseAddress.new(purchase_params)
+    @item = Item.find(params[:item_id])
+    if @purchase_address.valid?
+      pay_item
+      @purchase_address.save
+      redirect_to root_path
+    else
+      @item = Item.find(params[:item_id])
+      render action: :index
+    end
   end
 
-  def item_params(item)  
-    params.permit(:item_name, :item_detail, :category_id, :condition_id, :postage_id, :prefecture_id, :days_to_ship_id, :price).merge(user_id: current_user.id)
+  private
+
+  def purchase_params
+    params.require(:purchase_address).permit(:postal_code, :prefecture_id, :city, :house_number, :apartment, :phone_number)
+          .merge(item_id: params[:item_id], token: params[:token])
+  end
+
+  def pay_item
+    Payjp.api_key = ENV['PAYJP_SECRET_KEY']
+    @item = Item.find(params[:item_id])
+    Payjp::Charge.create(
+      amount: @item.price,
+      card: purchase_params[:token],
+      currency: 'jpy'
+    )
+  end
+
+  def move_to_index
+    item = Item.find(params[:item_id])
+    redirect_to root_path if current_user.id == item.user_id || !item.purchase.nil?
   end
 end
