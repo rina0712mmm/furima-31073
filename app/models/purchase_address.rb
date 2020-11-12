@@ -15,9 +15,7 @@ class PurchaseAddress
   validates :prefecture_id, numericality: { other_than: 0 }
 
   def save
-    item = Item.find(item_id)
-    user = item.user
-    purchase = Purchase.create(user_id: user.id, item_id: item.id, token: token)
+    purchase = Purchase.create(user_id: user_id, item_id: item_id, token: token)
     Address.create(postal_code: postal_code, prefecture_id: prefecture_id, city: city,
                    house_number: house_number, apartment: apartment, phone_number: phone_number, purchase_id: purchase.id)
   end
