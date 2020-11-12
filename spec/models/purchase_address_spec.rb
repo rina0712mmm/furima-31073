@@ -2,8 +2,16 @@ require 'rails_helper'
 
 RSpec.describe PurchaseAddress, type: :model do
   before do
-    @purchase_address = FactoryBot.build(:purchase_address)
+    sleep(1)
+      #FactoryBot.create（:user)を使って出品者と購入者を作る
+    buyer = FactoryBot.create(:user)
+    seller = FactoryBot.create(:user)
+      #FactoryBot.create(:item, user_id: @user1.id)（出品）
+    @purchase = FactoryBot.create(:item, user_id: seller.id)
+      #FactoryBot.build(:purchase_address, item_id: ,user_id: )（購入）
+    @purchase_address = FactoryBot.build(:purchase_address, item_id: @purchase.id, user_id: buyer.id)
   end
+
   describe '#create' do
     context 'アドレス登録がうまくいくとき' do
       it '全ての項目が存在すれば登録できる' do
